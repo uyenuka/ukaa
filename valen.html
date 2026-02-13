@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spesial Buat Kamu ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #fff0f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Login Section */
+        #login-page {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ff4d6d;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        /* Question Section */
+        #question-page img { width: 150px; margin-bottom: 20px; }
+        .btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        #yes-btn { background: #ff4d6d; color: white; z-index: 100; }
+        #no-btn { background: #808080; color: white; }
+
+        /* Gallery Section */
+        .photo-gallery { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .photo-gallery img { width: 100%; border-radius: 10px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+
+        /* Letter Section */
+        #letter-page { max-width: 400px; background: white; padding: 25px; border-radius: 15px; border: 2px dashed #ff4d6d; }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <h2>Siapa namamu? ❤️</h2>
+        <input type="text" id="name-input" placeholder="Masukkan nama kamu...">
+        <br>
+        <button onclick="checkName()" style="background: #ff4d6d; color: white;">Masuk</button>
+        <p id="error-msg" style="color: red; font-size: 12px;" class="hidden">Hayo, bukan kamu ya? Coba lagi!</p>
+    </div>
+
+    <div id="question-page" class="hidden">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndW16emZqbmJjZzRnd3B6bmJ6bmZqbmJjZzRnd3B6bmJ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/K6jS2VVJp7m7tH3Ahf/giphy.gif">
+        <h1 id="main-text">Will you be my Valentine? ❤️</h1>
+        <div class="btn-container">
+            <button id="yes-btn" onclick="showGallery()">YES!</button>
+            <button id="no-btn" onclick="rejectNo()">No</button>
+        </div>
+    </div>
+
+    <div id="gallery-page" class="hidden">
+        <h2>Yeayy! ❤️</h2>
+        <p>Lihat betapa cantiknya kamu...</p>
+        <div class="photo-gallery">
+            <img src="https://via.placeholder.com/150" alt="Foto 1">
+            <img src="https://via.placeholder.com/150" alt="Foto 2">
+            <img src="https://via.placeholder.com/150" alt="Foto 3">
+        </div>
+        <button onclick="showLetter()" style="background: #ff4d6d; color: white;">Ada surat buat kamu 💌</button>
+    </div>
+
+    <div id="letter-page" class="hidden">
+        <h3>Dear Sayang,</h3>
+        <p>Sejak kenal kamu, hari-hariku jadi jauh lebih bermakna. Terima kasih ya sudah mau bertahan sejauh ini sama aku. I love you so much!</p>
+        <hr>
+        <h4>Last Question: <br> Mau ga jadi pacar aku? 🌹</h4>
+        <button onclick="finalYes()" style="background: #4CAF50; color: white;">MAU BANGET!</button>
+    </div>
+
+    <script>
+        const targetName = "uka"; // GANTI NAMA PASANGANMU DI SINI (huruf kecil semua)
+        let yesSize = 16;
+        let noClicks = 0;
+        const noTexts = [
+            "Yakin?", 
+            "Plis beb...", 
+            "Pikirin lagi...", 
+            "Nanti nyesel lho", 
+            "Kok gitu sih?", 
+            "Jahat banget :("
+        ];
+
+        function checkName() {
+            const input = document.getElementById('name-input').value.toLowerCase();
+            if(input === targetName) {
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('question-page').classList.remove('hidden');
+            } else {
+                document.getElementById('error-msg').classList.remove('hidden');
+            }
+        }
+
+        function rejectNo() {
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            
+            // Perbesar tombol Yes
+            yesSize += 40; 
+            yesBtn.style.fontSize = yesSize + 'px';
+            yesBtn.style.padding = (yesSize/2) + 'px ' + yesSize + 'px';
+
+            // Ubah teks tombol No
+            if(noClicks < noTexts.length) {
+                noBtn.innerHTML = noTexts[noClicks];
+                noClicks++;
+            } else {
+                noBtn.innerHTML = "Harus klik YES! 😤";
+            }
+
+            // Jika tombol yes sudah sangat besar, penuhi layar
+            if(yesSize > 300) {
+                yesBtn.style.position = "fixed";
+                yesBtn.style.top = "0";
+                yesBtn.style.left = "0";
+                yesBtn.style.width = "100vw";
+                yesBtn.style.height = "100vh";
+            }
+        }
+
+        function showGallery() {
+            document.getElementById('question-page').classList.add('hidden');
+            document.getElementById('gallery-page').classList.remove('hidden');
+        }
+
+        function showLetter() {
+            document.getElementById('gallery-page').classList.add('hidden');
+            document.getElementById('letter-page').classList.remove('hidden');
+        }
+
+        function finalYes() {
+            alert("GASSS! I Love You Sayang! ❤️ Chat aku sekarang ya!");
+            window.location.href4 = "https://wa.me/628xxxxxxxxxx?text=I%20Want%20To%20Be%20Yours!"; 
+            // Ganti 628xxx dengan nomor WA-mu
+        }
+    </script>
+</body>
+</html>
