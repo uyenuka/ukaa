@@ -4,148 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spesial Buat Kamu ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: #fff0f3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            text-align: center;
-        }
+        :root { --primary-color: #ff4d6d; --bg-color: #fff0f3; }
+        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; text-align: center; }
+        
+        .heart { position: fixed; top: -10px; color: var(--primary-color); font-size: 20px; z-index: -1; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) translateX(20px) rotate(360deg); } }
 
+        .container { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2); width: 90%; max-width: 450px; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.5); max-height: 90vh; overflow-y: auto; position: relative; }
         .hidden { display: none !important; }
 
-        /* Login Section */
-        #login-page {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+        /* Grid Pilihan Foto */
+        .choice-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
+        .choice-item { width: 30%; cursor: pointer; transition: all 0.4s ease; border-radius: 10px; overflow: hidden; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .choice-item img { width: 100%; height: 90px; object-fit: cover; }
+        .choice-item p { font-size: 10px; margin: 5px 0; font-weight: bold; }
 
-        input {
-            padding: 10px;
-            border: 2px solid #ff4d6d;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            outline: none;
-        }
+        /* Loading & Animasi Pelukan */
+        .loader-bar { width: 100%; background: #eee; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        .loader-fill { width: 0%; height: 100%; background: var(--primary-color); animation: load 3s forwards; }
+        @keyframes load { to { width: 100%; } }
 
-        /* Question Section */
-        #question-page img { width: 150px; margin-bottom: 20px; }
-        .btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
-        
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+        .hugging-animation { font-size: 50px; display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .hug-left { animation: moveRight 1.5s ease-in-out infinite alternate; }
+        .hug-right { animation: moveLeft 1.5s ease-in-out infinite alternate; }
+        @keyframes moveRight { from { transform: translateX(0); } to { transform: translateX(15px); } }
+        @keyframes moveLeft { from { transform: translateX(0); } to { transform: translateX(-15px); } }
 
-        #yes-btn { background: #ff4d6d; color: white; z-index: 100; }
-        #no-btn { background: #808080; color: white; }
+        /* Gallery */
+        .photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; padding: 5px; max-height: 350px; overflow-y: auto; }
+        .photo-gallery img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; border: 2px solid #ffb3c1; }
 
-        /* Gallery Section */
-        .photo-gallery { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .photo-gallery img { width: 100%; border-radius: 10px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-
-        /* Letter Section */
-        #letter-page { max-width: 400px; background: white; padding: 25px; border-radius: 15px; border: 2px dashed #ff4d6d; }
+        button { padding: 12px 20px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-primary { background: var(--primary-color); color: white; margin-top: 10px; }
+        #yes-btn, #no-final-btn { background: var(--primary-color); color: white; }
+        #no-btn, #mau-temen-btn { background: #adb5bd; color: white; }
+        #name-input { padding: 12px; border-radius: 8px; border: 1px solid #ffb3c1; width: 80%; outline: none; }
     </style>
 </head>
 <body>
 
-    <div id="login-page">
+    <div id="heart-container"></div>
+
+    <div class="container" id="login-page">
         <h2>Siapa namamu? ❤️</h2>
-        <input type="text" id="name-input" placeholder="Masukkan nama kamu...">
-        <br>
-        <button onclick="checkName()" style="background: #ff4d6d; color: white;">Masuk</button>
-        <p id="error-msg" style="color: red; font-size: 12px;" class="hidden">Hayo, bukan kamu ya? Coba lagi!</p>
+        <input type="text" id="name-input" placeholder="Masukkan namamu...">
+        <br><br>
+        <button class="btn-primary" onclick="checkName()">Masuk</button>
+        <p id="error-msg" style="color: #ff4d6d;" class="hidden">ih Jule, masukin yg bener</p>
     </div>
 
-    <div id="question-page" class="hidden">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndW16emZqbmJjZzRnd3B6bmJ6bmZqbmJjZzRnd3B6bmJ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/K6jS2VVJp7m7tH3Ahf/giphy.gif">
-        <h1 id="main-text">Will you be my Valentine? ❤️</h1>
+   <div class="container hidden" id="choice-page">
+        <h3>Mana Ni Cowo Kamuu? Pilih dongg 😍</h3>
+        <div class="choice-grid">
+            <div class="choice-item" onclick="wrongChoice(this)">
+                <img src="https://i.ibb.co.com/XZz84tC3/XZz84tC3.jpg?text=Bukan">
+                <p>Ini??</p>
+            </div>
+
+            <div class="choice-item" id="my-photo-item" onclick="correctChoice()">
+                <img src="https://i.ibb.co.com/Fb7D1wd7/image.jpg?text=COWO+AKU">
+                <p>Inii?</p>
+            </div>
+
+            <div class="choice-item" onclick="wrongChoice(this)">
+                <img src="https://i.ibb.co.com/qY1TQ3Cz/image.jpg?text=Bukan">
+                <p>Ini?</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="loading-page">
+        <h3>Aku tau kamu pasti pilih aku! 😏❤️</h3>
+        <p>Tembak kamu dalam...</p>
+        <div class="loader-bar">
+            <div class="loader-fill"></div>
+        </div>
+        <div class="hugging-animation">
+            <span class="hug-left">🙋‍♂️</span>
+            <span class="hug-right">🙋‍♀️</span>
+        </div>
+        <p style="font-style: italic; font-size: 14px; margin-top: 10px;">Peluk duluu...</p>
+    </div>
+
+<div class="container hidden" id="question-page">
+        <img src="https://i.ibb.co.com/1WYYNNw/image.jpg" width="150" alt="Valentine">
+        <h2>Will you be my Valentine? ❤️</h2>
         <div class="btn-container">
             <button id="yes-btn" onclick="showGallery()">YES!</button>
             <button id="no-btn" onclick="rejectNo()">No</button>
         </div>
     </div>
 
-    <div id="gallery-page" class="hidden">
-        <h2>Yeayy! ❤️</h2>
-        <p>Lihat betapa cantiknya kamu...</p>
+    <div class="container hidden" id="gallery-page">
+        <h2>Yeayy! Pilihan tepat ❤️, makaci uda kirim poto rajin" lagi kirim potooo!!</h2>
         <div class="photo-gallery">
-            <img src="https://via.placeholder.com/150" alt="Foto 1">
-            <img src="https://via.placeholder.com/150" alt="Foto 2">
-            <img src="https://via.placeholder.com/150" alt="Foto 3">
+            <img src="https://i.ibb.co.com/Q3B2dY8n/Q3B2dY8n.jpg" alt="Foto 1">
+            <img src="https://i.ibb.co.com/wfXzzw8/wfXzzw8.jpg" alt="Foto 2">
+            <img src="https://i.ibb.co.com/fVsXmLNr/fVsXmLNr.jpg" alt="Foto 3">
+            <img src="https://i.ibb.co.com/XkX8ZVX3/XkX8ZVX3.jpg" alt="Foto 4">
+            <img src="https://i.ibb.co.com/3mDBFYh0/3mDBFYh0.jpg" alt="Foto 5">
+            <img src="https://i.ibb.co.com/M5QjQmcS/M5QjQmcS.jpg" alt="Foto 6">
+            <img src="https://i.ibb.co.com/Q7MSwzZT/Q7MSwzZT.jpg" alt="Foto 7">
+            <img src="https://i.ibb.co.com/pjnyDWnz/pjnyDWnz.jpg" alt="Foto 8">
+            <img src="https://i.ibb.co.com/3YhjWy06/3YhjWy06.jpg" alt="Foto 9">
+            <img src="https://i.ibb.co.com/0R87VTW9/0R87VTW9.jpg" alt="Foto 10">
+            <img src="https://i.ibb.co.com/WvbZXmNv/WvbZXmNv.jpg" alt="Foto 11">
+            <img src="https://i.ibb.co.com/RGcntbbD/RGcntbbD.jpg" alt="Foto 12">
+            <img src="https://i.ibb.co.com/rRm0sDD3/rRm0sDD3.jpg" alt="Foto 13">
+            <img src="https://i.ibb.co.com/dJ4JhfJv/dJ4JhfJv.jpg" alt="Foto 14">
+            <img src="https://i.ibb.co.com/fG4XphSN/fG4XphSN.jpg" alt="Foto 15">
         </div>
-        <button onclick="showLetter()" style="background: #ff4d6d; color: white;">Ada surat buat kamu 💌</button>
+        <button class="btn-primary" onclick="showLetter()">Baca Surat 💌</button>
     </div>
 
-    <div id="letter-page" class="hidden">
+    <div class="container hidden" id="letter-page">
         <h3>Dear Sayang,</h3>
-        <p>Sejak kenal kamu, hari-hariku jadi jauh lebih bermakna. Terima kasih ya sudah mau bertahan sejauh ini sama aku. I love you so much!</p>
-        <hr>
-        <h4>Last Question: <br> Mau ga jadi pacar aku? 🌹</h4>
-        <button onclick="finalYes()" style="background: #4CAF50; color: white;">MAU BANGET!</button>
+        <p id="isi-surat">"happy valentineeeee dayyyyyy, makasiii ya udaa bertahan sama aku selama iniiii, aku ga nyangkaa bisa sama kamuuu walauu akuu gaa rayainnbtapi kamu ga gimana" akuu rasanya kayak wow banget sama kamuu, makasii ya selama ini uda sama akuu hehe, plis jangan berubahh yaaa, boleh kalo lebih baik, kalo tidak baik jangan yaaa, terusss di hari valentine ini semogaaa kedepannya kita bisaaa saling mengasihii, trus SERING SERING POTOOO YAAA MWEHEHEHE🫰🏻🫰🏻❤️, loppp uuu forever ukaaa🤍"</p>
+        <hr style="border: 0; border-top: 1px solid #ffb3c1; margin: 20px 0;">
+        <h4 id="final-question-text">Tapi jujur deh... <br> Mau jadi bestie aku ga? 🥺</h4>
+        <div class="btn-container">
+            <button id="mau-temen-btn" onclick="rejectTemen()">Mau</button>
+            <button id="no-final-btn" onclick="finalYes()">GA! (MAU PACAR)</button>
+        </div>
     </div>
 
     <script>
-        const targetName = "uka"; // GANTI NAMA PASANGANMU DI SINI (huruf kecil semua)
+        const targetName = "uka";
+        let myPhotoScale = 1;
         let yesSize = 16;
-        let noClicks = 0;
-        const noTexts = [
-            "Yakin?", 
-            "Plis beb...", 
-            "Pikirin lagi...", 
-            "Nanti nyesel lho", 
-            "Kok gitu sih?", 
-            "Jahat banget :("
-        ];
+        let finalNoSize = 16;
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.getElementById('heart-container').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300);
 
         function checkName() {
             const input = document.getElementById('name-input').value.toLowerCase();
             if(input === targetName) {
                 document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('choice-page').classList.remove('hidden');
+            } else { document.getElementById('error-msg').classList.remove('hidden'); }
+        }
+
+        function wrongChoice(el) {
+            el.style.transform = "scale(0.5)";
+            el.style.opacity = "0.3";
+            el.style.pointerEvents = "none";
+            myPhotoScale += 0.3;
+            document.getElementById('my-photo-item').style.transform = `scale(${myPhotoScale})`;
+        }
+
+        function correctChoice() {
+            // Sembunyikan halaman pilihan
+            document.getElementById('choice-page').classList.add('hidden');
+            // Tampilkan halaman loading transisi
+            document.getElementById('loading-page').classList.remove('hidden');
+            
+            // Tunggu 3.5 detik (selesai loading) baru pindah ke pertanyaan Valentine
+            setTimeout(() => {
+                document.getElementById('loading-page').classList.add('hidden');
                 document.getElementById('question-page').classList.remove('hidden');
-            } else {
-                document.getElementById('error-msg').classList.remove('hidden');
-            }
+            }, 3500);
         }
 
         function rejectNo() {
             const yesBtn = document.getElementById('yes-btn');
-            const noBtn = document.getElementById('no-btn');
-            
-            // Perbesar tombol Yes
-            yesSize += 40; 
+            yesSize += 30;
             yesBtn.style.fontSize = yesSize + 'px';
             yesBtn.style.padding = (yesSize/2) + 'px ' + yesSize + 'px';
-
-            // Ubah teks tombol No
-            if(noClicks < noTexts.length) {
-                noBtn.innerHTML = noTexts[noClicks];
-                noClicks++;
-            } else {
-                noBtn.innerHTML = "Harus klik YES! 😤";
-            }
-
-            // Jika tombol yes sudah sangat besar, penuhi layar
-            if(yesSize > 300) {
-                yesBtn.style.position = "fixed";
-                yesBtn.style.top = "0";
-                yesBtn.style.left = "0";
-                yesBtn.style.width = "100vw";
-                yesBtn.style.height = "100vh";
-            }
+            document.getElementById('no-btn').innerHTML = "Harus YES!";
         }
 
         function showGallery() {
@@ -158,10 +194,21 @@
             document.getElementById('letter-page').classList.remove('hidden');
         }
 
+        function rejectTemen() {
+            const noFinalBtn = document.getElementById('no-final-btn');
+            finalNoSize += 40;
+            noFinalBtn.style.fontSize = finalNoSize + 'px';
+            if(finalNoSize > 100) {
+                noFinalBtn.style.position = "fixed";
+                noFinalBtn.style.top = "0"; noFinalBtn.style.left = "0";
+                noFinalBtn.style.width = "100vw"; noFinalBtn.style.height = "100vh";
+                noFinalBtn.innerHTML = "KLIK INI AJA! ❤️";
+            }
+        }
+
         function finalYes() {
-            alert("GASSS! I Love You Sayang! ❤️ Chat aku sekarang ya!");
-            window.location.href4 = "https://wa.me/628xxxxxxxxxx?text=I%20Want%20To%20Be%20Yours!"; 
-            // Ganti 628xxx dengan nomor WA-mu
+            alert("GASSS! Aku juga mau jadi pacar kamu! ❤️");
+            window.location.href = "https://wa.me/6285179640452?text=Aku%20Gamau%20Jadi%20Temen,%20Aku%20Mau%20Jadi%20Pacar!%20❤️";
         }
     </script>
 </body>
