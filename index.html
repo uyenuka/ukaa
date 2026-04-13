@@ -79,7 +79,7 @@ to{transform:translateY(100vh);}
 <!-- LOGIN -->
 <div class="container" id="login">
 <h2>Masukin kode dulu 🔒</h2>
-<p style="font-size:12px;">Hint: Tanggal Kita Pacaran</p>
+<p style="font-size:12px;">Hint: Kapan Tanggal Kita Pacaran</p>
 
 <div style="display:flex;justify-content:center;gap:6px;">
 <input class="pin" maxlength="1">
@@ -170,7 +170,7 @@ function checkPin(){
 let pin="";
 inputs.forEach(i=>pin+=i.value);
 
-if(pin==="140220"){
+if(pin==="140226"){
 document.getElementById("login").classList.add("hidden");
 document.getElementById("intro").classList.remove("hidden");
 playMusic();
