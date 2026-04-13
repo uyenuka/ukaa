@@ -1,215 +1,328 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spesial Buat Kamu ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary-color: #ff4d6d; --bg-color: #fff0f3; }
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; text-align: center; }
-        
-        .heart { position: fixed; top: -10px; color: var(--primary-color); font-size: 20px; z-index: -1; animation: fall linear forwards; }
-        @keyframes fall { to { transform: translateY(105vh) translateX(20px) rotate(360deg); } }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
 
-        .container { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2); width: 90%; max-width: 450px; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.5); max-height: 90vh; overflow-y: auto; position: relative; }
-        .hidden { display: none !important; }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-        /* Grid Pilihan Foto */
-        .choice-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
-        .choice-item { width: 30%; cursor: pointer; transition: all 0.4s ease; border-radius: 10px; overflow: hidden; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .choice-item img { width: 100%; height: 90px; object-fit: cover; }
-        .choice-item p { font-size: 10px; margin: 5px 0; font-weight: bold; }
+<style>
+:root { --primary:#ff4d6d; --bg:#fff0f3; }
 
-        /* Loading & Animasi Pelukan */
-        .loader-bar { width: 100%; background: #eee; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
-        .loader-fill { width: 0%; height: 100%; background: var(--primary-color); animation: load 3s forwards; }
-        @keyframes load { to { width: 100%; } }
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:var(--bg);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+}
 
-        .hugging-animation { font-size: 50px; display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-        .hug-left { animation: moveRight 1.5s ease-in-out infinite alternate; }
-        .hug-right { animation: moveLeft 1.5s ease-in-out infinite alternate; }
-        @keyframes moveRight { from { transform: translateX(0); } to { transform: translateX(15px); } }
-        @keyframes moveLeft { from { transform: translateX(0); } to { transform: translateX(-15px); } }
+.container{
+background:white;
+padding:25px;
+border-radius:20px;
+width:90%;
+max-width:420px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
 
-        /* Gallery */
-        .photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; padding: 5px; max-height: 350px; overflow-y: auto; }
-        .photo-gallery img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; border: 2px solid #ffb3c1; }
+.hidden{display:none;}
 
-        button { padding: 12px 20px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-primary { background: var(--primary-color); color: white; margin-top: 10px; }
-        #yes-btn, #no-final-btn { background: var(--primary-color); color: white; }
-        #no-btn, #mau-temen-btn { background: #adb5bd; color: white; }
-        #name-input { padding: 12px; border-radius: 8px; border: 1px solid #ffb3c1; width: 80%; outline: none; }
-    </style>
+button{
+padding:12px 20px;
+border:none;
+border-radius:12px;
+background:var(--primary);
+color:white;
+cursor:pointer;
+margin-top:15px;
+}
+
+.pin{
+width:38px;
+height:48px;
+font-size:20px;
+text-align:center;
+border-radius:10px;
+border:1px solid #ddd;
+}
+
+#photo{
+width:170px;
+border-radius:15px;
+margin:15px auto;
+display:block;
+}
+
+.heart{
+position:fixed;
+top:-10px;
+font-size:20px;
+animation:fall linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(100vh);}
+}
+</style>
 </head>
+
 <body>
 
-    <div id="heart-container"></div>
+<audio id="bg-music" loop>
+<source src="lagu.mp3" type="audio/mpeg">
+</audio>
 
-    <div class="container" id="login-page">
-        <h2>Siapa namamu? ❤️</h2>
-        <input type="text" id="name-input" placeholder="Masukkan namamu...">
-        <br><br>
-        <button class="btn-primary" onclick="checkName()">Masuk</button>
-        <p id="error-msg" style="color: #ff4d6d;" class="hidden">ih Jule, masukin yg bener</p>
-    </div>
+<!-- LOGIN -->
+<div class="container" id="login">
+<h2>Masukin kode dulu 🔒</h2>
+<p style="font-size:12px;">Hint: Tanggal Kita Pacaran</p>
 
-   <div class="container hidden" id="choice-page">
-        <h3>Mana Ni Cowo Kamuu? Pilih dongg 😍</h3>
-        <div class="choice-grid">
-            <div class="choice-item" onclick="wrongChoice(this)">
-                <img src="https://i.ibb.co.com/XZz84tC3/XZz84tC3.jpg?text=Bukan">
-                <p>Ini??</p>
-            </div>
+<div style="display:flex;justify-content:center;gap:6px;">
+<input class="pin" maxlength="1">
+<input class="pin" maxlength="1">
+<input class="pin" maxlength="1">
+<input class="pin" maxlength="1">
+<input class="pin" maxlength="1">
+<input class="pin" maxlength="1">
+</div>
 
-            <div class="choice-item" id="my-photo-item" onclick="correctChoice()">
-                <img src="https://i.ibb.co.com/Fb7D1wd7/image.jpg?text=COWO+AKU">
-                <p>Inii?</p>
-            </div>
+<button onclick="checkPin()">Masuk</button>
+<p id="error" class="hidden" style="color:red;">Salah 😜</p>
+</div>
 
-            <div class="choice-item" onclick="wrongChoice(this)">
-                <img src="https://i.ibb.co.com/qY1TQ3Cz/image.jpg?text=Bukan">
-                <p>Ini?</p>
-            </div>
-        </div>
-    </div>
+<!-- INTRO -->
+<div class="container hidden" id="intro">
+<h2>Hai kamu 🙂</h2>
+<p>Aku cuma mau kasih sesuatu kecil aja...</p>
+<button onclick="startBirthday()">Klik ya</button>
+</div>
 
-    <div class="container hidden" id="loading-page">
-        <h3>Aku tau kamu pasti pilih aku! 😏❤️</h3>
-        <p>Tembak kamu dalam...</p>
-        <div class="loader-bar">
-            <div class="loader-fill"></div>
-        </div>
-        <div class="hugging-animation">
-            <span class="hug-left">🙋‍♂️</span>
-            <span class="hug-right">🙋‍♀️</span>
-        </div>
-        <p style="font-style: italic; font-size: 14px; margin-top: 10px;">Peluk duluu...</p>
-    </div>
+<!-- BIRTHDAY -->
+<div class="container hidden" id="birthday">
+<h2>Happy Birthday 🎂❤️</h2>
 
-<div class="container hidden" id="question-page">
-        <img src="https://i.ibb.co.com/1WYYNNw/image.jpg" width="150" alt="Valentine">
-        <h2>Will you be my Valentine? ❤️</h2>
-        <div class="btn-container">
-            <button id="yes-btn" onclick="showGallery()">YES!</button>
-            <button id="no-btn" onclick="rejectNo()">No</button>
-        </div>
-    </div>
+<img id="photo" src="">
+<p id="text"></p>
 
-    <div class="container hidden" id="gallery-page">
-        <h2>Yeayy! Pilihan tepat ❤️, makaci uda kirim poto rajin" lagi kirim potooo!!</h2>
-        <div class="photo-gallery">
-            <img src="https://i.ibb.co.com/Q3B2dY8n/Q3B2dY8n.jpg" alt="Foto 1">
-            <img src="https://i.ibb.co.com/wfXzzw8/wfXzzw8.jpg" alt="Foto 2">
-            <img src="https://i.ibb.co.com/fVsXmLNr/fVsXmLNr.jpg" alt="Foto 3">
-            <img src="https://i.ibb.co.com/XkX8ZVX3/XkX8ZVX3.jpg" alt="Foto 4">
-            <img src="https://i.ibb.co.com/3mDBFYh0/3mDBFYh0.jpg" alt="Foto 5">
-            <img src="https://i.ibb.co.com/M5QjQmcS/M5QjQmcS.jpg" alt="Foto 6">
-            <img src="https://i.ibb.co.com/Q7MSwzZT/Q7MSwzZT.jpg" alt="Foto 7">
-            <img src="https://i.ibb.co.com/pjnyDWnz/pjnyDWnz.jpg" alt="Foto 8">
-            <img src="https://i.ibb.co.com/3YhjWy06/3YhjWy06.jpg" alt="Foto 9">
-            <img src="https://i.ibb.co.com/0R87VTW9/0R87VTW9.jpg" alt="Foto 10">
-            <img src="https://i.ibb.co.com/WvbZXmNv/WvbZXmNv.jpg" alt="Foto 11">
-            <img src="https://i.ibb.co.com/RGcntbbD/RGcntbbD.jpg" alt="Foto 12">
-            <img src="https://i.ibb.co.com/rRm0sDD3/rRm0sDD3.jpg" alt="Foto 13">
-            <img src="https://i.ibb.co.com/dJ4JhfJv/dJ4JhfJv.jpg" alt="Foto 14">
-            <img src="https://i.ibb.co.com/fG4XphSN/fG4XphSN.jpg" alt="Foto 15">
-        </div>
-        <button class="btn-primary" onclick="showLetter()">Baca Surat 💌</button>
-    </div>
+<button onclick="nextSlide()">Lanjut 👉</button>
+</div>
 
-    <div class="container hidden" id="letter-page">
-        <h3>Dear Sayang,</h3>
-        <p id="isi-surat">"happy valentineeeee dayyyyyy, makasiii ya udaa bertahan sama aku selama iniiii, aku ga nyangkaa bisa sama kamuuu walauu akuu gaa rayainnbtapi kamu ga gimana" akuu rasanya kayak wow banget sama kamuu, makasii ya selama ini uda sama akuu hehe, plis jangan berubahh yaaa, boleh kalo lebih baik, kalo tidak baik jangan yaaa, terusss di hari valentine ini semogaaa kedepannya kita bisaaa saling mengasihii, trus SERING SERING POTOOO YAAA MWEHEHEHE🫰🏻🫰🏻❤️, loppp uuu forever ukaaa🤍"</p>
-        <hr style="border: 0; border-top: 1px solid #ffb3c1; margin: 20px 0;">
-        <h4 id="final-question-text">Tapi jujur deh... <br> Mau jadi bestie aku ga? 🥺</h4>
-        <div class="btn-container">
-            <button id="mau-temen-btn" onclick="rejectTemen()">Mau</button>
-            <button id="no-final-btn" onclick="finalYes()">GA! (MAU PACAR)</button>
-        </div>
-    </div>
+<!-- GAME -->
+<div class="container hidden" id="game">
+<h2>Game Receh Kita 🎮</h2>
 
-    <script>
-        const targetName = "uka";
-        let myPhotoScale = 1;
-        let yesSize = 16;
-        let finalNoSize = 16;
+<div id="game-content">
+<h3>Rules Dulu 😏</h3>
+<p style="font-size:14px;">
+- Ada 10 pertanyaan<br>
+- Jawab jujur ya 😜<br>
+- Menang kalau benar semua 😏<br><br>
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.getElementById('heart-container').appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
-        }
-        setInterval(createHeart, 300);
+🎁 Hadiah:<br>
+- Menang → aku traktir matcha 🍵<br>
+- Kalah → yaudah... dapet aku aja 😌
+</p>
 
-        function checkName() {
-            const input = document.getElementById('name-input').value.toLowerCase();
-            if(input === targetName) {
-                document.getElementById('login-page').classList.add('hidden');
-                document.getElementById('choice-page').classList.remove('hidden');
-            } else { document.getElementById('error-msg').classList.remove('hidden'); }
-        }
+<button onclick="startQuiz()">Mulai 🎮</button>
+</div>
+</div>
 
-        function wrongChoice(el) {
-            el.style.transform = "scale(0.5)";
-            el.style.opacity = "0.3";
-            el.style.pointerEvents = "none";
-            myPhotoScale += 0.3;
-            document.getElementById('my-photo-item').style.transform = `scale(${myPhotoScale})`;
-        }
+<!-- RINDU -->
+<div class="container hidden" id="rindu">
+<h2>🙂</h2>
+<p>
+Jujur ya...<br><br>
 
-        function correctChoice() {
-            // Sembunyikan halaman pilihan
-            document.getElementById('choice-page').classList.add('hidden');
-            // Tampilkan halaman loading transisi
-            document.getElementById('loading-page').classList.remove('hidden');
-            
-            // Tunggu 3.5 detik (selesai loading) baru pindah ke pertanyaan Valentine
-            setTimeout(() => {
-                document.getElementById('loading-page').classList.add('hidden');
-                document.getElementById('question-page').classList.remove('hidden');
-            }, 3500);
-        }
+Aku ga tau sekarang kita gimana...<br>
+tapi aku masih suka keinget kamu 😭<br><br>
 
-        function rejectNo() {
-            const yesBtn = document.getElementById('yes-btn');
-            yesSize += 30;
-            yesBtn.style.fontSize = yesSize + 'px';
-            yesBtn.style.padding = (yesSize/2) + 'px ' + yesSize + 'px';
-            document.getElementById('no-btn').innerHTML = "Harus YES!";
-        }
+Hal-hal kecil kita...<br>
+yang receh tapi bikin ketawa 😆<br><br>
 
-        function showGallery() {
-            document.getElementById('question-page').classList.add('hidden');
-            document.getElementById('gallery-page').classList.remove('hidden');
-        }
+Dan entah kenapa...<br>
+kadang aku masih kangen 😌
+</p>
 
-        function showLetter() {
-            document.getElementById('gallery-page').classList.add('hidden');
-            document.getElementById('letter-page').classList.remove('hidden');
-        }
+<button onclick="chat()">Kalau kamu mau ngobrol 😏</button>
+</div>
 
-        function rejectTemen() {
-            const noFinalBtn = document.getElementById('no-final-btn');
-            finalNoSize += 40;
-            noFinalBtn.style.fontSize = finalNoSize + 'px';
-            if(finalNoSize > 100) {
-                noFinalBtn.style.position = "fixed";
-                noFinalBtn.style.top = "0"; noFinalBtn.style.left = "0";
-                noFinalBtn.style.width = "100vw"; noFinalBtn.style.height = "100vh";
-                noFinalBtn.innerHTML = "KLIK INI AJA! ❤️";
-            }
-        }
+<script>
+// MUSIC
+function playMusic(){
+let music=document.getElementById("bg-music");
+document.body.addEventListener("click",()=>{music.play();},{once:true});
+music.play().catch(()=>{});
+}
 
-        function finalYes() {
-            alert("GASSS! Aku juga mau jadi pacar kamu! ❤️");
-            window.location.href = "https://wa.me/6285179640452?text=Aku%20Gamau%20Jadi%20Temen,%20Aku%20Mau%20Jadi%20Pacar!%20❤️";
-        }
-    </script>
+// PIN
+const inputs=document.querySelectorAll(".pin");
+inputs.forEach((input,i)=>{
+input.addEventListener("input",()=>{
+if(input.value && i<5) inputs[i+1].focus();
+});
+});
+
+function checkPin(){
+let pin="";
+inputs.forEach(i=>pin+=i.value);
+
+if(pin==="140220"){
+document.getElementById("login").classList.add("hidden");
+document.getElementById("intro").classList.remove("hidden");
+playMusic();
+}else{
+document.getElementById("error").classList.remove("hidden");
+}
+}
+
+// BIRTHDAY FLOW
+function startBirthday(){
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("birthday").classList.remove("hidden");
+showSlide();
+}
+
+const texts=[
+"Selamat ulang tahun ya 🎂❤️",
+"Aku harap kamu selalu bahagia...",
+"Semua impian kamu tercapai ✨",
+"Aku ga mau bikin ini berat...",
+"Tapi jujur aja...",
+"Aku masi kangen kamuuu 😭"
+];
+
+const photos=[
+"https://i.ibb.co.com/Q3B2dY8n/Q3B2dY8n.jpg",
+"https://i.ibb.co.com/wfXzzw8/wfXzzw8.jpg",
+"https://i.ibb.co.com/fVsXmLNr/fVsXmLNr.jpg",
+"https://i.ibb.co.com/XkX8ZVX3/XkX8ZVX3.jpg",
+"https://i.ibb.co.com/3mDBFYh0/3mDBFYh0.jpg",
+"https://i.ibb.co.com/M5QjQmcS/M5QjQmcS.jpg"
+];
+
+let index=0;
+
+function showSlide(){
+document.getElementById("photo").src=photos[index];
+document.getElementById("text").innerHTML=texts[index];
+}
+
+function nextSlide(){
+index++;
+if(index < texts.length){
+showSlide();
+}else{
+document.getElementById("birthday").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+}
+}
+
+// GAME
+let questions=[
+{q:"Aku paling sering ngapain?",a:["Ganggu kamu 😜","Diam aja 😶"],correct:0},
+{q:"Kita paling sering?",a:["Ketawa 😂","Serius 😐"],correct:0},
+{q:"Aku pernah marah lama?",a:["Engga 😭","Iya 😡"],correct:0},
+{q:"Aku kangen kamu?",a:["Iya 🙂","Engga 😶"],correct:0},
+{q:"Kamu kangen aku?",a:["Iya 😳","Engga 😐"],correct:0},
+{q:"Aku orangnya?",a:["Receh 😭","Serius 😐"],correct:0},
+{q:"Kita sering ngobrol?",a:["Setiap hari 😆","Jarang 😶"],correct:0},
+{q:"Aku suka kamu?",a:["Iya 😌","Engga 😐"],correct:0},
+{q:"Kita punya kenangan?",a:["Banyak 😭","Biasa 😶"],correct:0},
+{q:"Kalau diulang?",a:["Mau 😳","Engga 😐"],correct:0}
+];
+
+let qIndex=0;
+let score=0;
+
+function startQuiz(){
+qIndex=0; score=0;
+
+document.getElementById("game-content").innerHTML=`
+<p id="score">Benar: 0/10</p>
+<p id="q"></p>
+<div id="choices"></div>
+<p id="res"></p>
+`;
+
+showQ();
+}
+
+function showQ(){
+let q=questions[qIndex];
+document.getElementById("q").innerHTML=q.q;
+
+let html="";
+q.a.forEach((opt,i)=>{
+html+=`<button onclick="answer(${i})">${opt}</button>`;
+});
+document.getElementById("choices").innerHTML=html;
+}
+
+function answer(choice){
+let q=questions[qIndex];
+let res=document.getElementById("res");
+
+if(choice===q.correct){
+score++;
+res.innerHTML="✅ BENAR 😭";
+}else{
+res.innerHTML="❌ SALAH 😜";
+}
+
+document.getElementById("score").innerHTML=`Benar: ${score}/10`;
+
+qIndex++;
+
+setTimeout(()=>{
+res.innerHTML="";
+if(qIndex < questions.length){
+showQ();
+}else{
+showResult();
+}
+},1000);
+}
+
+function showResult(){
+let win = score===10;
+
+document.getElementById("game-content").innerHTML=`
+<h2>${win?"Yey kamu menang 😭🎉":"Yey kamu kalah 😜"}</h2>
+<p>
+${win?"Janji ya aku traktir matcha 🍵 😏":"Yaudah... kamu dapet aku aja 😌"}
+</p>
+<button onclick="showRindu()">Lanjut 👉</button>
+`;
+}
+
+// RINDU
+function showRindu(){
+document.getElementById("game").classList.add("hidden");
+document.getElementById("rindu").classList.remove("hidden");
+}
+
+// WA
+function chat(){
+window.location.href="https://wa.me/6285179640452";
+}
+
+// HEART
+function createHeart(){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+setInterval(createHeart,300);
+
+</script>
+
 </body>
 </html>
